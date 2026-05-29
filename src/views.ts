@@ -4,8 +4,7 @@ import * as express from "express";
 export = (app:express.Application) => {
   // Exploits app Env
   app.get('/env', (req, res) => {
-    console.log(app.get(""+req.query.lookup));
-    res.send(app.get(""+req.query.lookup));
+    res.send('Environment information is not available');
   });
   app.get(`/login`, (req, res) => res.render('Login'));
 
