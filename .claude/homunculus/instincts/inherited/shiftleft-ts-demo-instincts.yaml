@@ -1,0 +1,467 @@
+# Instincts generated from https://github.com/tadanobutubutu/shiftleft-ts-demo
+# Generated: 2026-05-29T19:25:14.674Z
+# Version: 2.0
+# NOTE: This file supplements (does not replace) any existing curated instincts.
+# High-confidence manually curated instincts should be preserved alongside these.
+
+---
+id: shiftleft-ts-demo-commit-length
+trigger: "when writing a commit message"
+confidence: 0.6
+domain: git
+source: repo-analysis
+source_repo: https://github.com/tadanobutubutu/shiftleft-ts-demo
+---
+
+# Shiftleft Ts Demo Commit Length
+
+## Action
+
+Keep commit messages concise (~35 characters)
+
+## Evidence
+
+- Average commit message length: 35 chars
+- Based on 25 commits
+
+---
+id: shiftleft-ts-demo-naming-files
+trigger: "when creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/tadanobutubutu/shiftleft-ts-demo
+---
+
+# Shiftleft Ts Demo Naming Files
+
+## Action
+
+Use PascalCase naming convention
+
+## Evidence
+
+- Analyzed file naming patterns in repository
+- Dominant pattern: PascalCase
+
+---
+id: shiftleft-ts-demo-import-relative
+trigger: "when importing modules"
+confidence: 0.75
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/tadanobutubutu/shiftleft-ts-demo
+---
+
+# Shiftleft Ts Demo Import Relative
+
+## Action
+
+Use relative imports for project files
+
+## Evidence
+
+- Import analysis shows relative import pattern
+- Example: import { x } from '../lib/x'
+
+---
+id: shiftleft-ts-demo-export-style
+trigger: "when exporting from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/tadanobutubutu/shiftleft-ts-demo
+---
+
+# Shiftleft Ts Demo Export Style
+
+## Action
+
+Prefer named exports
+
+## Evidence
+
+- Export pattern analysis
+- Dominant style: named
+
+---
+id: shiftleft-ts-demo-workflow-update-controller-file
+trigger: "when doing update controller file"
+confidence: 0.8
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/tadanobutubutu/shiftleft-ts-demo
+---
+
+# Shiftleft Ts Demo Workflow Update Controller File
+
+## Action
+
+Follow the update-controller-file workflow:
+1. Edit the relevant controller file in src/Controllers (e.g., Login.ts or Order.ts)
+2. Commit the change with a message indicating the file updated
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~6x per month
+- Files: src/Controllers/Login.ts, src/Controllers/Order.ts
+
+---
+id: shiftleft-ts-demo-workflow-update-package-json
+trigger: "when doing update package json"
+confidence: 0.75
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/tadanobutubutu/shiftleft-ts-demo
+---
+
+# Shiftleft Ts Demo Workflow Update Package Json
+
+## Action
+
+Follow the update-package-json workflow:
+1. Edit package.json
+2. Commit the change with a message indicating package.json was updated
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~5x per month
+- Files: package.json
+
+---
+id: shiftleft-ts-demo-workflow-empty-commit-to-trigger-tests
+trigger: "when doing empty commit to trigger tests"
+confidence: 0.8
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/tadanobutubutu/shiftleft-ts-demo
+---
+
+# Shiftleft Ts Demo Workflow Empty Commit To Trigger Tests
+
+## Action
+
+Follow the empty-commit-to-trigger-tests workflow:
+1. Create an empty commit (no file changes)
+2. Push the commit to trigger tests
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~6x per month
+- Files: 
+
+---
+id: shiftleft-ts-demo-workflow-update-dockerfile
+trigger: "when doing update dockerfile"
+confidence: 0.6
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/tadanobutubutu/shiftleft-ts-demo
+---
+
+# Shiftleft Ts Demo Workflow Update Dockerfile
+
+## Action
+
+Follow the update-dockerfile workflow:
+1. Edit Dockerfile
+2. Commit the change with a message indicating Dockerfile was updated
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~2x per month
+- Files: Dockerfile
+
+---
+id: shiftleft-ts-demo-instinct-file-naming
+trigger: "When creating a new file (class, controller, etc.)"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: tadanobutubutu/shiftleft-ts-demo
+---
+
+# Shiftleft Ts Demo Instinct File Naming
+
+## Action
+
+Name the file using PascalCase (e.g., Login.ts, Order.ts)
+
+## Evidence
+
+- Pattern in files: src/Controllers/Login.ts, src/Controllers/Order.ts
+
+---
+id: shiftleft-ts-demo-instinct-function-naming
+trigger: "When defining a function"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: tadanobutubutu/shiftleft-ts-demo
+---
+
+# Shiftleft Ts Demo Instinct Function Naming
+
+## Action
+
+Use camelCase for function names
+
+## Evidence
+
+- Pattern in codebase: TypeScript conventions, inferred from language and naming analysis
+
+---
+id: shiftleft-ts-demo-instinct-class-naming
+trigger: "When defining a class"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: tadanobutubutu/shiftleft-ts-demo
+---
+
+# Shiftleft Ts Demo Instinct Class Naming
+
+## Action
+
+Use PascalCase for class names
+
+## Evidence
+
+- Pattern in codebase: TypeScript conventions, inferred from file/class naming
+
+---
+id: shiftleft-ts-demo-instinct-constant-naming
+trigger: "When defining a constant"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: tadanobutubutu/shiftleft-ts-demo
+---
+
+# Shiftleft Ts Demo Instinct Constant Naming
+
+## Action
+
+Use SCREAMING_SNAKE_CASE for constant names
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions.constants
+
+---
+id: shiftleft-ts-demo-instinct-import-style
+trigger: "When importing modules"
+confidence: 0.85
+domain: code-style
+source: repo-analysis
+source_repo: tadanobutubutu/shiftleft-ts-demo
+---
+
+# Shiftleft Ts Demo Instinct Import Style
+
+## Action
+
+Use relative import paths
+
+## Evidence
+
+- Pattern in codeStyle.importStyle: relative
+
+---
+id: shiftleft-ts-demo-instinct-export-style
+trigger: "When exporting modules or functions"
+confidence: 0.85
+domain: code-style
+source: repo-analysis
+source_repo: tadanobutubutu/shiftleft-ts-demo
+---
+
+# Shiftleft Ts Demo Instinct Export Style
+
+## Action
+
+Use named exports
+
+## Evidence
+
+- Pattern in codeStyle.exportStyle: named
+
+---
+id: shiftleft-ts-demo-instinct-error-handling
+trigger: "When handling errors in code"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: tadanobutubutu/shiftleft-ts-demo
+---
+
+# Shiftleft Ts Demo Instinct Error Handling
+
+## Action
+
+Use try-catch blocks for error handling
+
+## Evidence
+
+- Pattern in errorHandling.style: try-catch
+
+---
+id: shiftleft-ts-demo-instinct-test-location
+trigger: "When adding or updating tests"
+confidence: 0.7
+domain: testing
+source: repo-analysis
+source_repo: tadanobutubutu/shiftleft-ts-demo
+---
+
+# Shiftleft Ts Demo Instinct Test Location
+
+## Action
+
+Place test files in mixed locations (not strictly separated from source files)
+
+## Evidence
+
+- Pattern in architecture.testLocation: mixed
+
+---
+id: shiftleft-ts-demo-instinct-test-config
+trigger: "When configuring test settings"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: tadanobutubutu/shiftleft-ts-demo
+---
+
+# Shiftleft Ts Demo Instinct Test Config
+
+## Action
+
+Use a separate tsconfig.test.json with relaxed settings for tests
+
+## Evidence
+
+- Seen in commit: Add tsconfig.test.json with relaxed settings
+
+---
+id: shiftleft-ts-demo-instinct-git-commit-format
+trigger: "When writing a commit message"
+confidence: 0.85
+domain: git
+source: repo-analysis
+source_repo: tadanobutubutu/shiftleft-ts-demo
+---
+
+# Shiftleft Ts Demo Instinct Git Commit Format
+
+## Action
+
+Use the format: 'Update <file>' or 'Add <file>' or 'Empty commit to trigger final tests'; optionally append [skip ci]
+
+## Evidence
+
+- Seen in commits: Update src/views.ts [skip ci], Update src/Controllers/Login.ts [skip ci], Empty commit to trigger final tests
+
+---
+id: shiftleft-ts-demo-instinct-git-skip-ci
+trigger: "When making non-critical updates (e.g., documentation or config changes)"
+confidence: 0.8
+domain: git
+source: repo-analysis
+source_repo: tadanobutubutu/shiftleft-ts-demo
+---
+
+# Shiftleft Ts Demo Instinct Git Skip Ci
+
+## Action
+
+Append [skip ci] to the commit message to avoid triggering CI
+
+## Evidence
+
+- Seen in commits: Update src/views.ts [skip ci], Update src/Controllers/Login.ts [skip ci], Update Dockerfile [skip ci]
+
+---
+id: shiftleft-ts-demo-instinct-update-controller
+trigger: "When someone wants to update the logic or fix a bug in a controller"
+confidence: 0.95
+domain: workflow
+source: repo-analysis
+source_repo: tadanobutubutu/shiftleft-ts-demo
+---
+
+# Shiftleft Ts Demo Instinct Update Controller
+
+## Action
+
+Edit the relevant controller file in src/Controllers (e.g., Login.ts or Order.ts) and commit the change with a message indicating the file updated
+
+## Evidence
+
+- Workflow: update-controller-file
+- Seen in commits: Update src/Controllers/Login.ts [skip ci], Update src/Controllers/Order.ts [skip ci]
+
+---
+id: shiftleft-ts-demo-instinct-update-package-json
+trigger: "When someone wants to add, remove, or update dependencies or scripts"
+confidence: 0.95
+domain: workflow
+source: repo-analysis
+source_repo: tadanobutubutu/shiftleft-ts-demo
+---
+
+# Shiftleft Ts Demo Instinct Update Package Json
+
+## Action
+
+Edit package.json and commit the change with a message indicating package.json was updated
+
+## Evidence
+
+- Workflow: update-package-json
+- Seen in commits: Update package.json [skip ci]
+
+---
+id: shiftleft-ts-demo-instinct-empty-commit-trigger-tests
+trigger: "When someone wants to manually trigger the CI/CD pipeline or tests"
+confidence: 0.98
+domain: workflow
+source: repo-analysis
+source_repo: tadanobutubutu/shiftleft-ts-demo
+---
+
+# Shiftleft Ts Demo Instinct Empty Commit Trigger Tests
+
+## Action
+
+Create and push an empty commit (no file changes) to trigger tests
+
+## Evidence
+
+- Workflow: empty-commit-to-trigger-tests
+- Seen in commits: Empty commit to trigger final tests
+
+---
+id: shiftleft-ts-demo-instinct-update-dockerfile
+trigger: "When someone wants to update the Docker build or deployment process"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: tadanobutubutu/shiftleft-ts-demo
+---
+
+# Shiftleft Ts Demo Instinct Update Dockerfile
+
+## Action
+
+Edit Dockerfile and commit the change with a message indicating Dockerfile was updated
+
+## Evidence
+
+- Workflow: update-dockerfile
+- Seen in commits: Update Dockerfile [skip ci]
+
