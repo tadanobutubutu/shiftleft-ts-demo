@@ -1,0 +1,6 @@
+interface:
+  display_name: "Shiftleft Ts Demo"
+  short_description: "Repo-specific patterns and workflows for shiftleft-ts-demo"
+  default_prompt: "Use the shiftleft-ts-demo repo skill to follow existing architecture, testing, and workflow conventions."
+policy:
+  allow_implicit_invocation: true
