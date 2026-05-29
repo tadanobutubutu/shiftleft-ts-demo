@@ -16,7 +16,7 @@ export = (app:express.Application) => {
     */
     let result = '';
     try {
-      result = require('util').inspect(eval(""+req.query.userInput));
+      result = 'User input evaluation is disabled for security reasons';
     } catch (ex) {
       console.error(ex);
     }
