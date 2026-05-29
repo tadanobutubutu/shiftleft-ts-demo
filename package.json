@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run init-db && npm run server",
-    "init-db": "node db-init.js",
+    "init-db": "node out/db-init.js",
     "server": "PORT=8089 node index.js",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
