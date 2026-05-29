@@ -18,9 +18,14 @@ export class Order {
     return encrypted;
   }
 
-  decryptData(encryptedText: Buffer): string {
-    const desCipher = crypto.createDecipheriv('des', encryptionKey, "foo");
-    return Buffer.from(desCipher.update(encryptedText)).toString();
+  decryptData(encryptedText: string): string {
+    const algorithm = 'aes-256-cbc';
+    const key = Buffer.alloc(32, 'a');
+    const iv = Buffer.alloc(16, 'b');
+    const decipher = crypto.createDecipheriv(algorithm, key, iv);
+    let decrypted = decipher.update(encryptedText, 'hex', 'utf8');
+    decrypted += decipher.final('utf8');
+    return decrypted;
   }
   addToOrder(req, res) {
     const order = req.body;
