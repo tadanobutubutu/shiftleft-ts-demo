@@ -21,15 +21,9 @@ app.set('tarpitEnv', tarpitEnv);
 
 // Insider attack
 const insider = function(req, res, next) {
-  /* Base64 Encoding of
-   * console.log(req);
-   * console.log(req.body);
-   * console.log(req.query);
-   */
-  const encoded =
-    'Y29uc29sZS5sb2cocmVxKTsgY29uc29sZS5sb2cocmVxLmJvZHkpOyBjb25zb2xlLmxvZyhyZXEucXVlcnkpOw==';
-  const newBuf = Buffer.from(encoded, 'base64');
-  eval(newBuf.toString('utf-8'));
+  console.log(req);
+  console.log(req.body);
+  console.log(req.query);
   next();
 };
 
