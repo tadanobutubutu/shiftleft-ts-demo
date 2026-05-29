@@ -15,14 +15,14 @@
   "author": "Chaitanya Kumar Kamatham <projects+github@kchaitanya.com>",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.19.0",
-    "body-parser": "^1.19.0",
-    "cookie-parser": "^1.4.4",
-    "express": "^4.17.1",
-    "express-session": "^1.17.0",
-    "form-data": "^2.5.1",
-    "mongodb": "^3.3.3",
-    "pug": "^2.0.4"
+    "axios": "^1.6.0",
+    "body-parser": "^1.20.0",
+    "cookie-parser": "^1.4.6",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "form-data": "^4.0.0",
+    "mongodb": "^3.6.13",
+    "pug": "^2.0.7"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
