@@ -9,9 +9,13 @@ export class Order {
     return key;
   }
   encryptData(secretText: string) {
-    // Weak encryption
-    const desCipher = crypto.createCipheriv('des', encryptionKey, "foo");
-    return desCipher.update(secretText, 'utf8', 'hex');
+    const algorithm = 'aes-256-cbc';
+    const key = Buffer.alloc(32, 'a');
+    const iv = Buffer.alloc(16, 'b');
+    const cipher = crypto.createCipheriv(algorithm, key, iv);
+    let encrypted = cipher.update(secretText, 'utf8', 'hex');
+    encrypted += cipher.final('hex');
+    return encrypted;
   }
 
   decryptData(encryptedText: Buffer): string {
