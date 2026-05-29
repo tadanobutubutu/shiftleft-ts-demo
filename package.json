@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm run init-db && npm run server",
     "init-db": "node out/db-init.js",
-    "server": "PORT=8089 node index.js",
+    "server": "PORT=8089 node out/index.js",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile",
