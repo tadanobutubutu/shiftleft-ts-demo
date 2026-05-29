@@ -13,7 +13,7 @@ export class Order {
     const key = Buffer.alloc(32, 'a');
     const iv = Buffer.alloc(16, 'b');
     const cipher = crypto.createCipheriv(algorithm, key, iv);
-    let encrypted = cipher.update(secretText, 'utf8', 'hex');
+    let encrypted = cipher.update(plainText, 'utf8', 'hex');
     encrypted += cipher.final('hex');
     return encrypted;
   }
