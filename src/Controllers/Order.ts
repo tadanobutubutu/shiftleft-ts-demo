@@ -8,7 +8,7 @@ export class Order {
     // Hash Key
     return key;
   }
-  encryptData(secretText: string) {
+  encryptData(plainText: string) {
     const algorithm = 'aes-256-cbc';
     const key = Buffer.alloc(32, 'a');
     const iv = Buffer.alloc(16, 'b');
