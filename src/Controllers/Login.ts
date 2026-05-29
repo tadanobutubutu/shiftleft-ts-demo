@@ -10,7 +10,7 @@ export class Login {
     res.redirect('/login');
   }
 
-  encryptData(secretText) {
+  encryptData(plainText) {
     const crypto = require('crypto');
     const algorithm = 'aes-256-cbc';
     const key = Buffer.alloc(32, 'a');
