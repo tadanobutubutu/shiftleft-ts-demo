@@ -1,5 +1,12 @@
 # NodeJS Tarpit
 
+
+<!-- AUTO-PACKAGE-BADGES:START -->
+<!-- Auto-generated package badges -->
+
+![npm version](https://img.shields.io/npm/v/%40hoolicorp%2Fshiftleft-ts-example?style=flat-square&logo=npm&color=blue) ![npm downloads](https://img.shields.io/npm/dw/%40hoolicorp%2Fshiftleft-ts-example?style=flat-square&color=brightgreen) ![npm license](https://img.shields.io/npm/l/%40hoolicorp%2Fshiftleft-ts-example?style=flat-square) [![Deployed](https://img.shields.io/badge/deployed-1.0.0-blue?style=flat-square)](https://www.npmjs.com/package/@hoolicorp/shiftleft-ts-example)
+
+<!-- AUTO-PACKAGE-BADGES:END -->
 An ExpressJS (tarpit) application using mongoDB.
 
 I am using [httpie](https://httpie.org), an alternative to curl to trigger exploits.
