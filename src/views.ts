@@ -4,8 +4,7 @@ import * as express from "express";
 export = (app:express.Application) => {
   // Exploits app Env
   app.get('/env', (req, res) => {
-    console.log(app.get(""+req.query.lookup));
-    res.send(app.get(""+req.query.lookup));
+    res.send('Environment information is not available');
   });
   app.get(`/login`, (req, res) => res.render('Login'));
 
@@ -17,7 +16,7 @@ export = (app:express.Application) => {
     */
     let result = '';
     try {
-      result = require('util').inspect(eval(""+req.query.userInput));
+      result = 'User input evaluation is disabled for security reasons';
     } catch (ex) {
       console.error(ex);
     }
