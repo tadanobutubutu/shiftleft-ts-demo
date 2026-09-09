@@ -2,6 +2,7 @@ import express from "express";
 
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
+import crypto from 'crypto';
 import session from 'express-session';
 
 const { logger } = require('./Logger');
@@ -10,10 +11,12 @@ import registerViewRoutes from './views';
 
 const app: express.Application = express();
 const port = process.env.PORT || 8088;
-const SESSION_SECRET_KEY = 'kjhdkd-sjkhsjsh-kjshshkdhsk-jsjhd';
+// A per-process random secret keeps sessions working locally without a key in the repository; set SESSION_SECRET_KEY so sessions survive a restart.
+const sessionSecretKey =
+  process.env.SESSION_SECRET_KEY || crypto.randomBytes(32).toString('hex');
 
 const tarpitEnv = {
-  sessionSecretKey: process.env.SESSION_SECRET_KEY || SESSION_SECRET_KEY,
+  sessionSecretKey,
   applicationPort: process.env.PORT || 8088
 };
 
@@ -34,7 +37,7 @@ app.use(cookieParser());
 
 app.use(
   session({
-    secret: SESSION_SECRET_KEY,
+    secret: sessionSecretKey,
     resave: false,
     saveUninitialized: false
   })
