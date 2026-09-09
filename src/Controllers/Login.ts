@@ -1,6 +1,8 @@
 const logger = require('../Logger').logger;
 const MongoDBClient = require('../DB').MongoDBClient;
 
+const LOGIN_ENCRYPTION_PASSPHRASE = "This is a simple key, don't guess it";
+
 export class Login {
   loginFailed(req, res, { username, password, keeponline }) {
     res.locals.username = username;
@@ -12,13 +14,11 @@ export class Login {
 
   encryptData(plainText) {
     const crypto = require('crypto');
-    const algorithm = 'aes-256-cbc';
-    const key = Buffer.alloc(32, 'a');
-    const iv = Buffer.alloc(16, 'b');
-    const cipher = crypto.createCipheriv(algorithm, key, iv);
-    let encrypted = cipher.update(plainText, 'utf8', 'hex');
-    encrypted += cipher.final('hex');
-    return encrypted;
+    const key = crypto.scryptSync(LOGIN_ENCRYPTION_PASSPHRASE, 'tarpit-login', 32);
+    const iv = crypto.randomBytes(12);
+    const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
+    const encrypted = Buffer.concat([cipher.update(plainText, 'utf8'), cipher.final()]);
+    return `${iv.toString('hex')}:${cipher.getAuthTag().toString('hex')}:${encrypted.toString('hex')}`;
   }
 
   async handleLogin(req, res, client, data) {
