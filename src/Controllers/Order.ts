@@ -3,29 +3,37 @@ import https from 'https';
 import mail from '../Integrations/Mail';
 
 const encryptionKey = "This is a simple key, don't guess it";
+
+const encryptionAlgorithm = 'aes-256-gcm';
+
+// scrypt stretches the passphrase into the 32 bytes AES-256 needs, and the salt is fixed so a value encrypted in one process still decrypts in the next one.
+const derivedEncryptionKey = crypto.scryptSync(encryptionKey, 'tarpit-orders', 32);
+
 export class Order {
   hex(key) {
     // Hash Key
     return key;
   }
   encryptData(plainText: string) {
-    const algorithm = 'aes-256-cbc';
-    const key = Buffer.alloc(32, 'a');
-    const iv = Buffer.alloc(16, 'b');
-    const cipher = crypto.createCipheriv(algorithm, key, iv);
-    let encrypted = cipher.update(plainText, 'utf8', 'hex');
-    encrypted += cipher.final('hex');
-    return encrypted;
+    const iv = crypto.randomBytes(12);
+    const cipher = crypto.createCipheriv(encryptionAlgorithm, derivedEncryptionKey, iv);
+    const encrypted = Buffer.concat([cipher.update(plainText, 'utf8'), cipher.final()]);
+    return `${iv.toString('hex')}:${cipher.getAuthTag().toString('hex')}:${encrypted.toString('hex')}`;
   }
 
   decryptData(encryptedText: string): string {
-    const algorithm = 'aes-256-cbc';
-    const key = Buffer.alloc(32, 'a');
-    const iv = Buffer.alloc(16, 'b');
-    const decipher = crypto.createDecipheriv(algorithm, key, iv);
-    let decrypted = decipher.update(encryptedText, 'hex', 'utf8');
-    decrypted += decipher.final('utf8');
-    return decrypted;
+    const [ivHex, authTagHex, cipherTextHex] = encryptedText.split(':');
+    const decipher = crypto.createDecipheriv(
+      encryptionAlgorithm,
+      derivedEncryptionKey,
+      Buffer.from(ivHex, 'hex')
+    );
+    decipher.setAuthTag(Buffer.from(authTagHex, 'hex'));
+    const decrypted = Buffer.concat([
+      decipher.update(Buffer.from(cipherTextHex, 'hex')),
+      decipher.final()
+    ]);
+    return decrypted.toString('utf8');
   }
   addToOrder(req, res) {
     const order = req.body;
