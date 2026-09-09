@@ -4,6 +4,9 @@ RUN apk update && apk upgrade
 
 WORKDIR /usr/src/app
 COPY  ./ ./
-RUN npm install
+# --legacy-peer-deps is passed here rather than read from .npmrc, which the build context excludes, and it is what lets the TypeScript 4 tree install alongside tslint 5.
+RUN npm ci --ignore-scripts --legacy-peer-deps
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=40s CMD wget -q -O /dev/null http://127.0.0.1:8089/login || exit 1
 
 ENTRYPOINT [ "npm", "run", "start" ]
