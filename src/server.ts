@@ -19,16 +19,6 @@ const tarpitEnv = {
 
 app.set('tarpitEnv', tarpitEnv);
 
-// Insider attack
-const insider = function(req, res, next) {
-  console.log(req);
-  console.log(req.body);
-  console.log(req.query);
-  next();
-};
-
-app.use(insider);
-
 app.use(function(err, req, res, next) {
   logger.error(err.stack);
   res.status(500).send('Something broke!');
