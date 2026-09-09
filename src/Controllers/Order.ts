@@ -6,6 +6,9 @@ const encryptionKey = "This is a simple key, don't guess it";
 
 const encryptionAlgorithm = 'aes-256-gcm';
 
+// Naming the tag length pins the decipher to a full 16-byte tag, so a forged short tag cannot be presented as valid.
+const authTagLength = 16;
+
 // scrypt stretches the passphrase into the 32 bytes AES-256 needs, and the salt is fixed so a value encrypted in one process still decrypts in the next one.
 const derivedEncryptionKey = crypto.scryptSync(encryptionKey, 'tarpit-orders', 32);
 
@@ -16,7 +19,9 @@ export class Order {
   }
   encryptData(plainText: string) {
     const iv = crypto.randomBytes(12);
-    const cipher = crypto.createCipheriv(encryptionAlgorithm, derivedEncryptionKey, iv);
+    const cipher = crypto.createCipheriv(encryptionAlgorithm, derivedEncryptionKey, iv, {
+      authTagLength
+    });
     const encrypted = Buffer.concat([cipher.update(plainText, 'utf8'), cipher.final()]);
     return `${iv.toString('hex')}:${cipher.getAuthTag().toString('hex')}:${encrypted.toString('hex')}`;
   }
@@ -26,7 +31,8 @@ export class Order {
     const decipher = crypto.createDecipheriv(
       encryptionAlgorithm,
       derivedEncryptionKey,
-      Buffer.from(ivHex, 'hex')
+      Buffer.from(ivHex, 'hex'),
+      { authTagLength }
     );
     decipher.setAuthTag(Buffer.from(authTagHex, 'hex'));
     const decrypted = Buffer.concat([
@@ -71,13 +77,20 @@ export class Order {
   }
 
   createStripeRequest(creditCard, price, address) {
-    const STRIPE_CLIENT_ID = 'AKIA2E0A8F3B244C9986';
-    const STRIPE_CLIENT_SECRET_KEY = '7CE556A3BC234CC1FF9E8A5C324C0BB70AA21B6D';
-    https.request(
-      `http://invalidstripe.com?STRIPE_CLIENT_ID=${STRIPE_CLIENT_ID}&STRIPE_CLIENT_SECRET_KEY=${STRIPE_CLIENT_SECRET_KEY}&price=${price}&address=${JSON.stringify(
-        address
-      )}`
-    );
+    // The card, the address and the key travel in the TLS-protected body: a query string is recorded by every proxy and access log on the path.
+    const payload = JSON.stringify({ creditCard, price, address });
+    const request = https.request('https://invalidstripe.com/charges', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(payload),
+        Authorization: `Bearer ${process.env.STRIPE_CLIENT_SECRET_KEY}`,
+        'Stripe-Client-Id': process.env.STRIPE_CLIENT_ID
+      }
+    });
+    request.on('error', ex => console.error(ex));
+    request.write(payload);
+    request.end();
   }
 
   async processCC(req, res, orders, totalPrice) {
