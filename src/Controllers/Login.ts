@@ -1,24 +1,27 @@
+import crypto from 'crypto';
+
 const logger = require('../Logger').logger;
 const MongoDBClient = require('../DB').MongoDBClient;
 
+// Set LOGIN_ENCRYPTION_KEY so values encrypted before a restart still decrypt after it; without it the process encrypts under a key only it holds, which is still better than a key anyone reading the repository holds.
+const LOGIN_ENCRYPTION_PASSPHRASE =
+  process.env.LOGIN_ENCRYPTION_KEY || crypto.randomBytes(32).toString('hex');
+
 export class Login {
   loginFailed(req, res, { username, password, keeponline }) {
+    // The submitted password is deliberately not carried into the response context: nothing renders it, and putting it there is how it reaches page caches and error reporters.
     res.locals.username = username;
-    res.locals.password = password;
     res.locals.keeponline = keeponline;
     res.locals.message = 'Failed to Sign in. Please verify credentials';
     res.redirect('/login');
   }
 
-  encryptData(secretText) {
-    const crypto = require('crypto');
-
-    // Weak encryption
-    const desCipher = crypto.createCipheriv(
-      'des',
-      "This is a simple password, don't guess it"
-    );
-    return desCipher.write(secretText, 'utf8', 'hex'); // BAD: weak encryption
+  encryptData(plainText) {
+    const key = crypto.scryptSync(LOGIN_ENCRYPTION_PASSPHRASE, 'tarpit-login', 32);
+    const iv = crypto.randomBytes(12);
+    const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
+    const encrypted = Buffer.concat([cipher.update(plainText, 'utf8'), cipher.final()]);
+    return `${iv.toString('hex')}:${cipher.getAuthTag().toString('hex')}:${encrypted.toString('hex')}`;
   }
 
   async handleLogin(req, res, client, data) {

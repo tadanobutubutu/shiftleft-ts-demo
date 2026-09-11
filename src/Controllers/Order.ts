@@ -2,21 +2,46 @@ import crypto from 'crypto';
 import https from 'https';
 import mail from '../Integrations/Mail';
 
-const encryptionKey = "This is a simple key, don't guess it";
+// Set ORDER_ENCRYPTION_KEY so orders encrypted before a restart still decrypt after it; without it the process encrypts under a key only it holds, which is still better than a key anyone reading the repository holds.
+const encryptionKey =
+  process.env.ORDER_ENCRYPTION_KEY || crypto.randomBytes(32).toString('hex');
+
+const encryptionAlgorithm = 'aes-256-gcm';
+
+// Naming the tag length pins the decipher to a full 16-byte tag, so a forged short tag cannot be presented as valid.
+const authTagLength = 16;
+
+// scrypt stretches the passphrase into the 32 bytes AES-256 needs, and the salt is fixed so a value encrypted in one process still decrypts in the next one.
+const derivedEncryptionKey = crypto.scryptSync(encryptionKey, 'tarpit-orders', 32);
+
 export class Order {
   hex(key) {
     // Hash Key
     return key;
   }
-  encryptData(secretText: string) {
-    // Weak encryption
-    const desCipher = crypto.createCipheriv('des', encryptionKey, "foo");
-    return desCipher.update(secretText, 'utf8', 'hex');
+  encryptData(plainText: string) {
+    const iv = crypto.randomBytes(12);
+    const cipher = crypto.createCipheriv(encryptionAlgorithm, derivedEncryptionKey, iv, {
+      authTagLength
+    });
+    const encrypted = Buffer.concat([cipher.update(plainText, 'utf8'), cipher.final()]);
+    return `${iv.toString('hex')}:${cipher.getAuthTag().toString('hex')}:${encrypted.toString('hex')}`;
   }
 
-  decryptData(encryptedText: Buffer): string {
-    const desCipher = crypto.createDecipheriv('des', encryptionKey, "foo");
-    return Buffer.from(desCipher.update(encryptedText)).toString();
+  decryptData(encryptedText: string): string {
+    const [ivHex, authTagHex, cipherTextHex] = encryptedText.split(':');
+    const decipher = crypto.createDecipheriv(
+      encryptionAlgorithm,
+      derivedEncryptionKey,
+      Buffer.from(ivHex, 'hex'),
+      { authTagLength }
+    );
+    decipher.setAuthTag(Buffer.from(authTagHex, 'hex'));
+    const decrypted = Buffer.concat([
+      decipher.update(Buffer.from(cipherTextHex, 'hex')),
+      decipher.final()
+    ]);
+    return decrypted.toString('utf8');
   }
   addToOrder(req, res) {
     const order = req.body;
@@ -54,13 +79,20 @@ export class Order {
   }
 
   createStripeRequest(creditCard, price, address) {
-    const STRIPE_CLIENT_ID = 'AKIA2E0A8F3B244C9986';
-    const STRIPE_CLIENT_SECRET_KEY = '7CE556A3BC234CC1FF9E8A5C324C0BB70AA21B6D';
-    https.request(
-      `http://invalidstripe.com?STRIPE_CLIENT_ID=${STRIPE_CLIENT_ID}&STRIPE_CLIENT_SECRET_KEY=${STRIPE_CLIENT_SECRET_KEY}&price=${price}&address=${JSON.stringify(
-        address
-      )}`
-    );
+    // The card, the address and the key travel in the TLS-protected body: a query string is recorded by every proxy and access log on the path.
+    const payload = JSON.stringify({ creditCard, price, address });
+    const request = https.request('https://invalidstripe.com/charges', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(payload),
+        Authorization: `Bearer ${process.env.STRIPE_CLIENT_SECRET_KEY}`,
+        'Stripe-Client-Id': process.env.STRIPE_CLIENT_ID
+      }
+    });
+    request.on('error', ex => console.error(ex));
+    request.write(payload);
+    request.end();
   }
 
   async processCC(req, res, orders, totalPrice) {

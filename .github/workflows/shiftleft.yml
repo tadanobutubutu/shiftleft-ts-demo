@@ -7,6 +7,11 @@ on:
   pull_request:
   workflow_dispatch:
 
+# The Qwiet subscription allows two simultaneous scans, so a burst of pushes on one PR otherwise submits several scans that compete for those slots.
+concurrency:
+  group: harness-sast-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   NextGen-Static-Analysis:
     runs-on: ubuntu-latest
