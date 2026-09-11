@@ -1,7 +1,11 @@
+import crypto from 'crypto';
+
 const logger = require('../Logger').logger;
 const MongoDBClient = require('../DB').MongoDBClient;
 
-const LOGIN_ENCRYPTION_PASSPHRASE = "This is a simple key, don't guess it";
+// Set LOGIN_ENCRYPTION_KEY so values encrypted before a restart still decrypt after it; without it the process encrypts under a key only it holds, which is still better than a key anyone reading the repository holds.
+const LOGIN_ENCRYPTION_PASSPHRASE =
+  process.env.LOGIN_ENCRYPTION_KEY || crypto.randomBytes(32).toString('hex');
 
 export class Login {
   loginFailed(req, res, { username, password, keeponline }) {
@@ -13,7 +17,6 @@ export class Login {
   }
 
   encryptData(plainText) {
-    const crypto = require('crypto');
     const key = crypto.scryptSync(LOGIN_ENCRYPTION_PASSPHRASE, 'tarpit-login', 32);
     const iv = crypto.randomBytes(12);
     const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
