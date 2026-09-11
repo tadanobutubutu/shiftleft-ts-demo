@@ -9,20 +9,10 @@ export = (app:express.Application) => {
   app.get(`/login`, (req, res) => res.render('Login'));
 
   app.get(`/user-input`, (req, res) => {
-    /*
-      User input vulnerability,
-      if the user passes vulnerable javascipt code, its executed in user's browser
-      ex: alert('hi')
-    */
-    let result = '';
-    try {
-      result = 'User input evaluation is disabled for security reasons';
-    } catch (ex) {
-      console.error(ex);
-    }
+    // The page echoes what was typed: the value is coerced to a string here and the template escapes it into a paragraph, so nothing a visitor sends is parsed as markup or script.
     res.render('UserInput', {
-      userInput: req.query.userInput,
-      result,
+      userInput: String(req.query.userInput ?? ''),
+      result: 'User input evaluation is disabled for security reasons',
       date: new Date().toUTCString()
     });
   });
