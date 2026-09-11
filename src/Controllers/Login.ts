@@ -9,8 +9,8 @@ const LOGIN_ENCRYPTION_PASSPHRASE =
 
 export class Login {
   loginFailed(req, res, { username, password, keeponline }) {
+    // The submitted password is deliberately not carried into the response context: nothing renders it, and putting it there is how it reaches page caches and error reporters.
     res.locals.username = username;
-    res.locals.password = password;
     res.locals.keeponline = keeponline;
     res.locals.message = 'Failed to Sign in. Please verify credentials';
     res.redirect('/login');
