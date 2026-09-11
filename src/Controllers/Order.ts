@@ -2,7 +2,9 @@ import crypto from 'crypto';
 import https from 'https';
 import mail from '../Integrations/Mail';
 
-const encryptionKey = "This is a simple key, don't guess it";
+// Set ORDER_ENCRYPTION_KEY so orders encrypted before a restart still decrypt after it; without it the process encrypts under a key only it holds, which is still better than a key anyone reading the repository holds.
+const encryptionKey =
+  process.env.ORDER_ENCRYPTION_KEY || crypto.randomBytes(32).toString('hex');
 
 const encryptionAlgorithm = 'aes-256-gcm';
 
